@@ -33,11 +33,12 @@ func connectToDatabase() (*mongo.Client, error) {
 func main() {
 
 	router := mux.NewRouter()
+
 	//partie inscription
-	router.HandleFunc("/inscription", inscription).Methods("POST")
+	router.HandleFunc("/Diayma/inscription", inscription).Methods("POST")
 
 	//partie connexion
-	router.HandleFunc("/authentification", handleLogin).Methods("POST")
+	// router.HandleFunc("/authentification", handleLogin).Methods("POST")
 
 	// Définition de l'URL  pour les ajouts
 	router.HandleFunc("/acheteur/ajout", addAcheteur).Methods("POST")

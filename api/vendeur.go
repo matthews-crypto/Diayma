@@ -13,6 +13,7 @@ import (
 type Vendeur struct {
 	Nom           string   `json:"nom"`
 	Prenom        string   `json:"prenom"`
+	Login         string   `json:"login"`
 	Telephone     int      `json:"telephone"`
 	MoyenPaiement []string `json:"moyenPaiement"`
 	NomBoutique   []string `json:"nomBoutique"`

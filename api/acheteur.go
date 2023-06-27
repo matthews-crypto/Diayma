@@ -15,6 +15,7 @@ import (
 type Acheteur struct {
 	Nom         string   `json:"nom"`
 	Prenom      string   `json:"prenom"`
+	Login       string   `json:"login"`
 	Panier      []string `json:"panier"`
 	Commandes   []string `json:"commandes"`
 	Preferences []string `json:"preferences"`
