@@ -91,3 +91,56 @@ func deleteVendeur(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(map[string]string{"message": "Vendeur supprimé avec succès"})
 }
+
+func listeVendeur(w http.ResponseWriter, r *http.Request) {
+	// Connexion à la base de données
+	client, err := connectToDatabase()
+	if err != nil {
+		log.Println("Erreur de connexion à la base de données:", err)
+		http.Error(w, "Erreur de connexion à la base de données", http.StatusInternalServerError)
+		return
+	}
+	defer client.Disconnect(context.Background())
+
+	// Sélectionner la collection "vendeur"
+	collection := client.Database("Diayma").Collection("vendeur")
+
+	// Rechercher tous les documents dans la collection
+	cur, err := collection.Find(context.Background(), bson.M{})
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer cur.Close(context.Background())
+
+	// Créer une liste de vendeurs
+	var vendeurs []Vendeur
+
+	// Parcourir les résultats et ajouter chaque document à la liste des vendeurs
+	for cur.Next(context.Background()) {
+		var vendeur Vendeur
+		err := cur.Decode(&vendeur)
+		if err != nil {
+			log.Fatal(err)
+		}
+		vendeurs = append(vendeurs, vendeur)
+	}
+
+	if err := cur.Err(); err != nil {
+		log.Fatal(err)
+	}
+
+	// Convertir la liste des vendeurs en JSON
+	vendeursJSON, err := json.Marshal(vendeurs)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// Définir le type de contenu de la réponse
+	w.Header().Set("Content-Type", "application/json")
+
+	// Envoyer la liste des vendeurs en tant que réponse
+	_, err = w.Write(vendeursJSON)
+	if err != nil {
+		log.Fatal(err)
+	}
+}

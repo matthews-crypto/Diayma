@@ -56,8 +56,9 @@ func main() {
 	//Définition de l'URL de lecture
 	router.HandleFunc("/acheteur/lire/elementListe/{telephone}", uniqueAcheteur).Methods("GET")
 	router.HandleFunc("/acheteur/lire/Liste", listeAcheteur).Methods("GET")
+	router.HandleFunc("/vendeur/lire/Liste", listeVendeur).Methods("GET")
 
 	// Démarrage du serveur HTTP
 	log.Println("Démarrage du serveur sur le port 8080...")
-	log.Fatal(http.ListenAndServe(":8080", router))
+	log.Fatal(http.ListenAndServe("192.168.0.73:8080", router))
 }
