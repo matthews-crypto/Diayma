@@ -3,8 +3,10 @@ package main
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 	"go.mongodb.org/mongo-driver/bson"
@@ -60,6 +62,7 @@ func addVendeur(w http.ResponseWriter, r *http.Request) {
 
 // supression d'un vendeur
 func deleteVendeur(w http.ResponseWriter, r *http.Request) {
+	// enableCors(w, r)
 	// Connexion à la base de données
 	client, err := connectToDatabase()
 	if err != nil {
@@ -75,9 +78,13 @@ func deleteVendeur(w http.ResponseWriter, r *http.Request) {
 	// Obtenir l'ID de l'vendeur à supprimer à partir des paramètres de la requête
 	vars := mux.Vars(r)
 	vendeurID := vars["id"]
+	telephoneI, err := strconv.Atoi(vendeurID)
+	if err != nil {
+		fmt.Println("erreur convertion")
+	}
 
 	// Créer un filtre pour l'ID de l'vendeur
-	filter := bson.M{"_id": vendeurID}
+	filter := bson.M{"telephone": telephoneI}
 
 	// Supprimer l'vendeur de la collection
 	_, err = collection.DeleteOne(context.Background(), filter)
@@ -93,6 +100,7 @@ func deleteVendeur(w http.ResponseWriter, r *http.Request) {
 }
 
 func listeVendeur(w http.ResponseWriter, r *http.Request) {
+	// enableCors(w, r)
 	// Connexion à la base de données
 	client, err := connectToDatabase()
 	if err != nil {

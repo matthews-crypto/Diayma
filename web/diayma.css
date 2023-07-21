@@ -1,0 +1,16 @@
+#btnAfficher{
+    background-color: aqua;
+    border-radius: 5px;
+    width: 15%;
+    height: 30%;
+}
+#btnAfficher:hover{
+    background-color: rgb(15, 128, 177);
+}
+body{
+    background-color: aliceblue;
+    text-align: center;
+}
+ul{
+display: hidden;
+}

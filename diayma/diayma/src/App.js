@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import './liste.css'
+
 
 function AdminInterface() {
   const [vendors, setVendors] = useState([]);
@@ -17,14 +19,15 @@ function AdminInterface() {
   };
 
   return (
-    <div>
+    <div className='liste'>
+        <img src="../public/LogoDiayma" alt="" />
       <h1>Interface administrateur</h1>
-      <button onClick={handleFetchVendors}>Afficher les vendeurs</button>
+      <button className='bouton' onClick={handleFetchVendors}>Afficher les vendeurs</button>
 
       {error && <p>{error}</p>}
 
       <h2>Liste des vendeurs</h2>
-      <ul>
+      <ul className='list'>
         {vendors.map(vendor => (
           <li key={vendor.id}>
             <p>Nom : {vendor.nom}</p>
@@ -36,6 +39,7 @@ function AdminInterface() {
             <p>CIN : {vendor.cin}</p>
             <p>Email : {vendor.email}</p>
             <p>Type de vendeur : {vendor.typeVendeur}</p>
+            <p className='sep'>______________________________________________________________________</p>
           </li>
         ))}
       </ul>
