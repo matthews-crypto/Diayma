@@ -42,7 +42,8 @@
                         const vendeur = {
                             nom: event.target.getAttribute('data-nom'),
                             email: event.target.getAttribute('data-email'),
-                            telephone: event.target.getAttribute('data-telephone')
+                            telephone: event.target.getAttribute('data-telephone'),
+                            prenom: event.target.getAttribute('data-prenom')
                         };
                         showPopup(vendeur);
                     }
