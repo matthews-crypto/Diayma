@@ -89,5 +89,5 @@ func main() {
 
 	// Démarrage du serveur HTTP
 	log.Println("Démarrage du serveur sur le port 8080...")
-	log.Fatal(http.ListenAndServe("192.168.0.82:8080", router))
+	log.Fatal(http.ListenAndServe("192.168.0.89:8080", router))
 }

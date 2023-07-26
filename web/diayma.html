@@ -8,8 +8,21 @@
 </head>
 <body>
     <h1>Liste des Vendeurs</h1>
-    <div id="vendeurs"></div>
     <button id="btnAfficher">Afficher les vendeurs</button>
+    <div id="vendeurs"></div>
+    <div class="message" id="message"></div>
+
+    <!-- Le div pour afficher le popup -->
+    <div id="overlay"></div>
+    <div id="popup">
+        <span id="closePopup">X</span>
+        <h2 id="vendeurNom"></h2>
+        <p><strong>Prenom:</strong> <span id="vendeurPrenom"></span> </p>
+        <p><strong>Email:</strong> <span id="vendeurEmail"></span></p>
+        <p><strong>Téléphone:</strong> <span id="vendeurTelephone"></span></p>
+        <p><strong>Moyen Paiement:</strong> <span id="vendeurMoyenPaiement"></span> </p>
+        <p><strong>Type Vendeur:</strong> <span id="vendeurTypeVendeur"></span> </p>
+    </div>
 
     <script src="diayma.js"></script>
 </body>
