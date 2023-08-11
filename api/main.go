@@ -31,34 +31,35 @@ func connectToDatabase() (*mongo.Client, error) {
 	return client, nil
 }
 
-//	func enableCors(w http.ResponseWriter, r *http.Request) {
-//		(w).Header().Set("Access-Control-Allow-Origin", "*")
-//		(w).Header().Set("Access-Control-Allow-Methods", "DELETE")
-//		if r.Method == "OPTIONS" {
-//			// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
-//			(w).Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
-//			return
+func enableCors(w http.ResponseWriter, r *http.Request) {
+	(w).Header().Set("Access-Control-Allow-Origin", "*")
+	(w).Header().Set("Access-Control-Allow-Methods", "DELETE")
+	// if r.Method == "OPTIONS" {
+	// 	// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
+	// 	(w).Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
+	// 	return
+	// }
+}
+
+// func gestionCors(next http.HandlerFunc) http.HandlerFunc {
+// 	return func(w http.ResponseWriter, r *http.Request) {
+// 		// Autoriser les requêtes provenant de n'importe quel domaine (remplacez '*' par le domaine spécifique si nécessaire)
+// 		w.Header().Set("Access-Control-Allow-Origin", "*")
+
+// 		// Autoriser les méthodes HTTP spécifiées (dans ce cas, nous utilisons DELETE)
+// 		w.Header().Set("Access-Control-Allow-Methods", "DELETE")
+
+// 		// Vérifier si la requête est une requête OPTIONS
+// 		if r.Method == "OPTIONS" {
+// 			// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
+// 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
+// 			return
+// 		}
+
+//			// Appeler le gestionnaire HTTP réel
+//			next(w, r)
 //		}
 //	}
-func gestionCors(next http.HandlerFunc) http.HandlerFunc {
-	return func(w http.ResponseWriter, r *http.Request) {
-		// Autoriser les requêtes provenant de n'importe quel domaine (remplacez '*' par le domaine spécifique si nécessaire)
-		w.Header().Set("Access-Control-Allow-Origin", "*")
-
-		// Autoriser les méthodes HTTP spécifiées (dans ce cas, nous utilisons DELETE)
-		w.Header().Set("Access-Control-Allow-Methods", "DELETE")
-
-		// Vérifier si la requête est une requête OPTIONS
-		if r.Method == "OPTIONS" {
-			// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
-			w.Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
-			return
-		}
-
-		// Appeler le gestionnaire HTTP réel
-		next(w, r)
-	}
-}
 func main() {
 
 	router := mux.NewRouter()
@@ -67,7 +68,7 @@ func main() {
 	router.HandleFunc("/Diayma/inscription", inscription).Methods("POST")
 
 	//partie connexion
-	// router.HandleFunc("/authentification", handleLogin).Methods("POST")
+	// router.HandleFunc("/authentification",handleLogin).Methods("POST")
 
 	// Définition de l'URL  pour les ajouts
 	router.HandleFunc("/acheteur/ajout", addAcheteur).Methods("POST")
@@ -76,7 +77,7 @@ func main() {
 
 	// Définition de l'URL  pour les suppression
 	router.HandleFunc("/acheteur/supprime/{id}", deleteAcheteur).Methods("DELETE")
-	router.HandleFunc("/vendeur/supprime/{id}", gestionCors(deleteVendeur)).Methods("DELETE")
+	router.HandleFunc("/vendeur/supprime/{id}", deleteVendeur).Methods("DELETE")
 	router.HandleFunc("/ article/supprime/{id}", deleteArticle).Methods("DELETE")
 
 	//DEfinition de l'URL pour les modifications
@@ -85,9 +86,16 @@ func main() {
 	//Définition de l'URL de lecture
 	router.HandleFunc("/acheteur/lire/elementListe/{telephone}", uniqueAcheteur).Methods("GET")
 	router.HandleFunc("/acheteur/lire/Liste", listeAcheteur).Methods("GET")
-	router.HandleFunc("/vendeur/lire/Liste", gestionCors(listeVendeur)).Methods("GET")
+	router.HandleFunc("/vendeur/lire/Liste", listeVendeur).Methods("GET")
 
-	// Démarrage du serveur HTTP
+	//Démarrage du serveur HTTPS
 	log.Println("Démarrage du serveur sur le port 8080...")
-	log.Fatal(http.ListenAndServe("192.168.0.89:8080", router))
+	log.Fatal(http.ListenAndServe("192.168.0.69:8080", router))
+
+	// certFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.crt"
+	// keyFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.csr"
+
+	// // Démarrez le serveur en mode HTTPS en utilisant le certificat SSL/TLS auto-signé
+	// log.Println("Démarrage du serveur en mode HTTPS sur le port 8080...")
+	// log.Fatal(http.ListenAndServeTLS("192.168.0.89:8080", certFile, keyFile, router))
 }

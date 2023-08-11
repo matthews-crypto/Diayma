@@ -62,7 +62,7 @@ func addVendeur(w http.ResponseWriter, r *http.Request) {
 
 // supression d'un vendeur
 func deleteVendeur(w http.ResponseWriter, r *http.Request) {
-	// enableCors(w, r)
+	enableCors(w, r)
 	// Connexion à la base de données
 	client, err := connectToDatabase()
 	if err != nil {
@@ -100,8 +100,8 @@ func deleteVendeur(w http.ResponseWriter, r *http.Request) {
 }
 
 func listeVendeur(w http.ResponseWriter, r *http.Request) {
-	// enableCors(w, r)
-	// Connexion à la base de données
+	enableCors(w, r)
+	//Connexion à la base de données
 	client, err := connectToDatabase()
 	if err != nil {
 		log.Println("Erreur de connexion à la base de données:", err)

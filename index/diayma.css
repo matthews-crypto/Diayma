@@ -35,8 +35,9 @@
             border: none;
             border-radius: 5px;
             padding: 5px 10px;
-            margin-left: 10px;
+            margin-right: 1%;
             cursor: pointer;
+
         }
 
         .btnSupprimer:hover {
