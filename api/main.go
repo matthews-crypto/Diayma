@@ -70,6 +70,7 @@ func main() {
 	//partie connexion
 	// router.HandleFunc("/authentification",handleLogin).Methods("POST")
 	router.HandleFunc("/api/login", login).Methods("POST")
+	router.HandleFunc("/api/inscription", inscriptionHandler).Methods("POST")
 
 	// Définition de l'URL  pour les ajouts
 	router.HandleFunc("/acheteur/ajout", addAcheteur).Methods("POST")
@@ -91,7 +92,7 @@ func main() {
 
 	//Démarrage du serveur HTTPS
 	log.Println("Démarrage du serveur sur le port 8080...")
-	log.Fatal(http.ListenAndServe("192.168.0.96:8080", router))
+	log.Fatal(http.ListenAndServe("192.168.0.89:8080", router))
 
 	// certFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.crt"
 	// keyFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.csr"
