@@ -75,12 +75,12 @@ func main() {
 	// Définition de l'URL  pour les ajouts
 	router.HandleFunc("/acheteur/ajout", addAcheteur).Methods("POST")
 	router.HandleFunc("/vendeur/ajout", addVendeur).Methods("POST")
-	router.HandleFunc("/artcicle/ajout", addArticle).Methods("POST")
+	// router.HandleFunc("/artcicle/ajout", addArticle).Methods("POST")
 
 	// Définition de l'URL  pour les suppression
 	router.HandleFunc("/acheteur/supprime/{id}", deleteAcheteur).Methods("DELETE")
 	router.HandleFunc("/vendeur/supprime/{id}", deleteVendeur).Methods("DELETE")
-	router.HandleFunc("/ article/supprime/{id}", deleteArticle).Methods("DELETE")
+	// router.HandleFunc("/ article/supprime/{id}", deleteArticle).Methods("DELETE")
 
 	//DEfinition de l'URL pour les modifications
 	router.HandleFunc("/acheteur/update/{telephone}v4.", modifierAcheteur).Methods("PUT")
@@ -90,9 +90,19 @@ func main() {
 	router.HandleFunc("/acheteur/lire/Liste", listeAcheteur).Methods("GET")
 	router.HandleFunc("/vendeur/lire/Liste", listeVendeur).Methods("GET")
 
+	// router pour le produit
+	api := router.PathPrefix("/api").Subrouter()
+	{
+		// Enregistrer les fonctions avec Mux pour des URL spécifiques
+		api.HandleFunc("/products", getProducts).Methods("GET")
+		api.HandleFunc("/products", addProduct).Methods("POST")
+		api.HandleFunc("/products/{name}", updateProduct).Methods("PUT")
+		api.HandleFunc("/products/{name}", deleteProduct).Methods("DELETE")
+	}
+
 	//Démarrage du serveur HTTPS
-	log.Println("Démarrage du serveur sur le port 8080...")
-	log.Fatal(http.ListenAndServe("192.168.0.89:8080", router))
+	log.Println("Démarrage du serveur sur le port 192.168.0.70:8080...")
+	log.Fatal(http.ListenAndServe("192.168.0.70:8080", router))
 
 	// certFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.crt"
 	// keyFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.csr"

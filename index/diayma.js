@@ -1,10 +1,11 @@
+// ©matthews-crypto
 // Fonction pour récupérer la liste des vendeurs depuis l'API
          // Votre code JavaScript pour récupérer et afficher les vendeurs
          function getVendeurs() {
             const audioElement = document.getElementById('audioElement');
             audioElement.src = "chatbot/audio2.mp3";
             audioElement.play();
-            fetch('http://192.168.0.69:8080/vendeur/lire/Liste')
+            fetch('http://192.168.0.89:8080/vendeur/lire/Liste')
                 .then(response => response.json())
                 .then(data => {
                     // Appel réussi, traitement des données
@@ -55,7 +56,7 @@
         }
 
         function supprimerVendeur(vendeurId) {
-            fetch(`http://192.168.0.69:8080/vendeur/supprime/${vendeurId}`, {
+            fetch(`http://192.168.0.89:8080/vendeur/supprime/${vendeurId}`, {
                 method: 'DELETE'
             })
             .then(response => {
@@ -115,3 +116,4 @@
                         audioElement.src = "chatbot/audio3.mp3";
                         audioElement.play();
         }
+             // ©matthews-crypto

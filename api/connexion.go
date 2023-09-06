@@ -1,3 +1,4 @@
+// ©matthews-crypto
 package main
 
 import (
@@ -8,24 +9,21 @@ import (
 	"net/http"
 
 	"go.mongodb.org/mongo-driver/bson"
-	// "go.mongodb.org/mongo-driver/mongo"
+
+	"golang.org/x/crypto/bcrypt"
 )
 
 type User struct {
 	Login    string `json:"login"`
-	Password string `json:"motDePasse"`
-	Type     string `json:"userType"`
+	Password string `json:"password"`
+	Prenom   string `json:"prenom"`
+	Nom      string `json:"nom"`
 }
 
 type LoginCredentials struct {
 	Login    string `json:"login"`
 	Password string `json:"motDePasse"`
-	Type     string `json:"userType"`
 }
-
-// func inscription(w http.ResponseWriter, r *http.Request) {
-// 	// Your existing registration code
-// }
 
 func login(w http.ResponseWriter, r *http.Request) {
 	client, err := connectToDatabase()
@@ -45,28 +43,32 @@ func login(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	filter := bson.M{"login": credentials.Login, "motDePasse": credentials.Password, "userType": credentials.Type}
-	fmt.Println(filter)
+	filter := bson.M{"login": credentials.Login}
+	fmt.Println("filter: ", filter)
 	var user User
+	fmt.Println("user: ", user)
+
 	err = collection.FindOne(context.Background(), filter).Decode(&user)
-	fmt.Println(user)
+	fmt.Println("user decodé: ", user)
 	if err != nil {
 		http.Error(w, "User not found", http.StatusUnauthorized)
 		return
-	} else {
-		http.Error(w, "Connexte avec succes", http.StatusAccepted)
 	}
-	// fmt.Println(user.Password)
 
-	// if user.Password == credentials.Password {
-	// 	if user.Type == "acheteur" {
-	// 		http.Redirect(w, r, "/acheteur/ajout", http.StatusFound)
-	// 	} else if user.Type == "vendeur" {
-	// 		http.Redirect(w, r, "/vendeur/ajout", http.StatusFound)
-	// 	} else {
-	// 		http.Error(w, "Invalid user type", http.StatusBadRequest)
-	// 	}
-	// } else {
-	// 	http.Error(w, "Login ou mot de passe incorrect", http.StatusUnauthorized)
-	// }
+	fmt.Println("password given: ", credentials.Password)
+	fmt.Println("password hashed: ", user.Password)
+
+	err = bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(credentials.Password))
+	if err != nil {
+		// Le mot de passe est incorrect
+		http.Error(w, "mot de passe incorrect", http.StatusUnauthorized)
+		fmt.Println(err)
+		return
+	}
+	// user connecter
+	http.Redirect(w, r, "/acheteur/ajout", http.StatusAccepted)
+	// print(user)
+	// print("connected")
 }
+
+// ©matthews-crypto
