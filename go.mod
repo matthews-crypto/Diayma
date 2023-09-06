@@ -9,6 +9,7 @@ require (
 	cloud.google.com/go/dialogflow v1.36.0 // indirect
 	cloud.google.com/go/longrunning v0.5.0 // indirect
 	github.com/andybalholm/brotli v1.0.5 // indirect
+	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
 	github.com/gabriel-vasile/mimetype v1.4.2 // indirect
 	github.com/go-playground/locales v0.14.1 // indirect
 	github.com/go-playground/universal-translator v0.18.1 // indirect

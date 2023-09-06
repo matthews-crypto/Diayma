@@ -1,4 +1,5 @@
-// ©matthews-crypto
+// Le code du serveur backend en Golang
+
 package main
 
 import (
@@ -7,7 +8,9 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"time"
 
+	"github.com/dgrijalva/jwt-go"
 	"go.mongodb.org/mongo-driver/bson"
 
 	"golang.org/x/crypto/bcrypt"
@@ -18,12 +21,16 @@ type User struct {
 	Password string `json:"password"`
 	Prenom   string `json:"prenom"`
 	Nom      string `json:"nom"`
+	Token    string `json:"token"`
 }
 
 type LoginCredentials struct {
 	Login    string `json:"login"`
 	Password string `json:"motDePasse"`
 }
+
+// La clé secrète utilisée pour générer et valider les tokens
+var secretKey = []byte("secret")
 
 func login(w http.ResponseWriter, r *http.Request) {
 	client, err := connectToDatabase()
@@ -34,7 +41,7 @@ func login(w http.ResponseWriter, r *http.Request) {
 	}
 	defer client.Disconnect(context.Background())
 
-	// Sélectionner la collection "vendeurs"
+	// Sélectionner la collection "personne"
 	collection := client.Database("Diayma").Collection("personne")
 	var credentials LoginCredentials
 	err = json.NewDecoder(r.Body).Decode(&credentials)
@@ -65,10 +72,43 @@ func login(w http.ResponseWriter, r *http.Request) {
 		fmt.Println(err)
 		return
 	}
-	// user connecter
-	http.Redirect(w, r, "/acheteur/ajout", http.StatusAccepted)
-	// print(user)
-	// print("connected")
-}
 
-// ©matthews-crypto
+	// Le vendeur est connecté
+	// Créer un token pour le vendeur avec ses informations
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"prenom":   user.Prenom,
+		"nom":      user.Nom,
+		"login":    user.Login,
+		"password": user.Password,
+		"token":    user.Token,
+		"iat":      time.Now().Unix(),
+		"exp":      time.Now().Add(24 * time.Hour).Unix()})
+	// Signer le token avec la clé secrète
+	tokenString, err := token.SignedString(secretKey)
+	if err != nil {
+		// Si une erreur se produit lors de la création du token, renvoyer une erreur 500
+		http.Error(w, "Erreur de création du token", http.StatusInternalServerError)
+		fmt.Println(err)
+		return
+	}
+
+	// Envoyer le token au vendeur dans le header et le corps de la réponse
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Authorization", "Bearer "+tokenString)
+	w.WriteHeader(http.StatusOK)
+	json.NewEncoder(w).Encode(map[string]interface{}{"token": tokenString})
+
+	// Stocker le token dans la base de données avec les informations du vendeur
+	res, err := collection.UpdateOne(
+		context.Background(),
+		bson.M{"_id": user.Login},
+		bson.D{
+			{"$set", bson.D{{"token", tokenString}}},
+		},
+	)
+	if err != nil {
+		// Si une erreur se produit lors de la mise à jour du document, afficher un message d'erreur
+		log.Println("Erreur de mise à jour du token:", err)
+	}
+	fmt.Println("Nombre de documents mis à jour:", res.ModifiedCount)
+}
