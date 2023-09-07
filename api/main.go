@@ -34,41 +34,13 @@ func connectToDatabase() (*mongo.Client, error) {
 func enableCors(w http.ResponseWriter, r *http.Request) {
 	(w).Header().Set("Access-Control-Allow-Origin", "*")
 	(w).Header().Set("Access-Control-Allow-Methods", "DELETE")
-	// if r.Method == "OPTIONS" {
-	// 	// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
-	// 	(w).Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
-	// 	return
-	// }
 }
 
-// func gestionCors(next http.HandlerFunc) http.HandlerFunc {
-// 	return func(w http.ResponseWriter, r *http.Request) {
-// 		// Autoriser les requêtes provenant de n'importe quel domaine (remplacez '*' par le domaine spécifique si nécessaire)
-// 		w.Header().Set("Access-Control-Allow-Origin", "*")
-
-// 		// Autoriser les méthodes HTTP spécifiées (dans ce cas, nous utilisons DELETE)
-// 		w.Header().Set("Access-Control-Allow-Methods", "DELETE")
-
-// 		// Vérifier si la requête est une requête OPTIONS
-// 		if r.Method == "OPTIONS" {
-// 			// Répondre avec un en-tête CORS réussi pour les requêtes OPTIONS
-// 			w.Header().Set("Access-Control-Allow-Headers", "Content-Type") // Vous pouvez ajouter d'autres en-têtes si nécessaire
-// 			return
-// 		}
-
-//			// Appeler le gestionnaire HTTP réel
-//			next(w, r)
-//		}
-//	}
 func main() {
 
 	router := mux.NewRouter()
 
-	//partie inscription
-	// router.HandleFunc("/Diayma/inscription", inscription).Methods("POST")
-
-	//partie connexion
-	// router.HandleFunc("/authentification",handleLogin).Methods("POST")
+	//Inscription ,authentification
 	router.HandleFunc("/api/login", login).Methods("POST")
 	router.HandleFunc("/api/inscription", inscriptionHandler).Methods("POST")
 
@@ -90,10 +62,10 @@ func main() {
 	router.HandleFunc("/acheteur/lire/Liste", listeAcheteur).Methods("GET")
 	router.HandleFunc("/vendeur/lire/Liste", listeVendeur).Methods("GET")
 
-	// router pour le produit
+	// router pour les articles(groupage)
 	api := router.PathPrefix("/api").Subrouter()
 	{
-		// Enregistrer les fonctions avec Mux pour des URL spécifiques
+		// spécification du groupage des articles
 		api.HandleFunc("/products", getProducts).Methods("GET")
 		api.HandleFunc("/products", addProduct).Methods("POST")
 		api.HandleFunc("/products/{name}", updateProduct).Methods("PUT")
@@ -104,10 +76,4 @@ func main() {
 	log.Println("Démarrage du serveur sur le port 192.168.0.70:8080...")
 	log.Fatal(http.ListenAndServe("192.168.0.70:8080", router))
 
-	// certFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.crt"
-	// keyFile := "C:/Users/lenovo/OneDrive/Documents/GitHub/Diayma/index/server.csr"
-
-	// // Démarrez le serveur en mode HTTPS en utilisant le certificat SSL/TLS auto-signé
-	// log.Println("Démarrage du serveur en mode HTTPS sur le port 8080...")
-	// log.Fatal(http.ListenAndServeTLS("192.168.0.89:8080", certFile, keyFile, router))
 }
