@@ -47,12 +47,10 @@ func main() {
 	// Définition de l'URL  pour les ajouts
 	router.HandleFunc("/acheteur/ajout", addAcheteur).Methods("POST")
 	router.HandleFunc("/vendeur/ajout", addVendeur).Methods("POST")
-	// router.HandleFunc("/artcicle/ajout", addArticle).Methods("POST")
 
 	// Définition de l'URL  pour les suppression
 	router.HandleFunc("/acheteur/supprime/{id}", deleteAcheteur).Methods("DELETE")
 	router.HandleFunc("/vendeur/supprime/{id}", deleteVendeur).Methods("DELETE")
-	// router.HandleFunc("/ article/supprime/{id}", deleteArticle).Methods("DELETE")
 
 	//DEfinition de l'URL pour les modifications
 	router.HandleFunc("/acheteur/update/{telephone}v4.", modifierAcheteur).Methods("PUT")
@@ -73,7 +71,7 @@ func main() {
 	}
 
 	//Démarrage du serveur HTTPS
-	log.Println("Démarrage du serveur sur le port 192.168.0.70:8080...")
-	log.Fatal(http.ListenAndServe("192.168.0.70:8080", router))
+	log.Println("Démarrage du serveur sur le port 192.168.0.86:8080...")
+	log.Fatal(http.ListenAndServe("192.168.0.86:8080", router))
 
 }
