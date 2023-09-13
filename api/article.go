@@ -13,9 +13,11 @@ import (
 )
 
 type Product struct {
-	Name  string `json:"name"`
-	Price int    `json:"price"`
-	Image string `json:"image"`
+	Nom         string `json:"nom"`
+	Quantite    string `json:"quantite"`
+	Prix        int    `json:"prix"`
+	Description string `json:"description"`
+	Image       string `json:"image"`
 }
 
 func getProducts(w http.ResponseWriter, r *http.Request) {
@@ -91,7 +93,7 @@ func updateProduct(w http.ResponseWriter, r *http.Request) {
 		context.Background(),
 		bson.M{"name": name},
 		bson.D{
-			{"$set", bson.D{{"price", product.Price}, {"image", product.Image}}},
+			{"$set", bson.D{{"prix", product.Prix}, {"image", product.Image}}},
 		},
 	)
 	if err != nil {
